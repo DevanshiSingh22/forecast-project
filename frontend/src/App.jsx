@@ -6,7 +6,7 @@ import {
 } from "recharts";
 import "./App.css";
 
-const API = "http://localhost:5000";
+const API = "https://forecast-project.onrender.com";
 const DEFAULT_FROM = "2024-01-24T08:00";
 const DEFAULT_TO   = "2024-01-25T08:00";
 
