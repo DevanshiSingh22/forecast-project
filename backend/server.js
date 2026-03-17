@@ -17,7 +17,7 @@ app.get("/api/actual", async (req, res) => {
     const { from, to } = req.query;
     if (!from || !to) return res.status(400).json({ error: "from and to are required" });
 
-    
+
     const resp = await axios.get(
       "https://data.elexon.co.uk/bmrs/api/v1/datasets/FUELHH",
       {
@@ -74,14 +74,14 @@ app.get("/api/forecast", async (req, res) => {
     const fromTs = new Date(from);
     const toTs = new Date(to);
 
-    
+
     const filtered = raw.filter((item) => {
       const st = new Date(item.startTime);
       const h = (st - new Date(item.publishTime)) / 3600000;
       return st >= fromTs && st <= toTs && h >= 0 && h <= 48;
     });
 
-    
+
     const byStartTime = {};
     filtered.forEach((f) => {
       const key = normalizeTime(f.startTime);
@@ -102,7 +102,7 @@ app.get("/api/forecast", async (req, res) => {
         );
 
         return {
-          startTime, 
+          startTime,
           generation: Number(best.generation),
           publishTime: best.publishTime,
         };
@@ -165,5 +165,10 @@ app.get("/api/debug", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+setInterval(() => {
+  axios.get("https://forecast-project.onrender.com/api/actual?from=2024-01-24T08:00&to=2024-01-24T09:00")
+    .catch(() => { });
+}, 14 * 60 * 1000);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
